@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>销量图</title>
+    <script src="lib/echarts.common.min.js"></script>
+</head>
+<body>
+    <div id="main" style="width: 600px;height:400px;"></div>
+    
+    <script >
+      
+        var sales=window.parent.access()
+        // console.log(sales)
+        var titles=[]
+        var datas=[]
+        for(var i=0;i<sales.length;i++){
+            titles.push(sales[i].time)
+            datas.push(sales[i].sales)
+        }
+        console.log(titles)
+        console.log(datas)
+        var myChart = echarts.init(document.getElementById('main'));
+                
+                var option = {
+                    title: {
+                        text: '店铺最近七天销量'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:['销量/订单数']
+                    },
+                    xAxis: {
+                        data: titles
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '销量/订单数',
+                        type: 'bar',
+                        data: datas
+                    }]
+                };
+        myChart.setOption(option)
+              
+                    
+</script>
+</body>
+</html>

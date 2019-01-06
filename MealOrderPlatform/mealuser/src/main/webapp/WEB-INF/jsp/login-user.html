@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>注册/登录</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!--<link href="signin.css" rel="stylesheet">-->
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script> -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body style="background: url('static/food4.jpeg') no-repeat;background-size: 100%">
+   
+    <div class="container" >
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" id="app">
+                
+                <form class="form-signin">
+                    
+                    <div >
+                        <h2 class="form-signin-heading" style="text-align: center;">XX订餐系统</h2>   
+                        <ul class="nav nav-pills pull-right ">
+                                        <li :class="swt1"><a href="#" @click.prevent="lup">注册</a></li>
+                                        <li :class="swt2"><a href="#" @click.prevent="lin">登录</a></li>
+                             </ul>
+                            
+                        </div>
+                    <label for="inputphoneno" class="sr-only">Phone Number</label>
+                    <label v-show="!flag">手机号：</label>
+                    <input v-model="uno" type="text" id="inputphoneno" class="form-control" placeholder="电话号码" required autofocus>
+                    <br>
+                    <label for="inputuname" class="sr-only">用户名</label>
+                    <input  v-model="uname" v-show="flag" type="text" id="inputuname" class="form-control" placeholder="用户名" required autofocus>
+                    <br v-show="flag">
+                    <label v-show="!flag">密码：</label>
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input v-model="upwd" type="password" id="inputPassword" class="form-control" placeholder="密码  不少于6位" required>
+                    <br>
+                    
+                    <div v-show="flag"  class="radio">
+                        <label>
+                            <input v-model="ugender" type="radio" name="sex" id="input1" value="男" >
+                            男
+                        </label>
+                        <label>
+                            <input v-model="ugender" type="radio" name="sex" id="input2" value="女" >
+                            女
+                        </label>
+                    </div>
+                    <br>
+                    
+                    <button v-show="flag" class="btn btn-lg btn-primary btn-block" type="button" @click="signup">注册</button>
+                    <button v-show="!flag" class="btn btn-lg btn-primary btn-block" type="button"@click="signin">登录</button>
+                </form>
+        </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div> <!-- /container -->
+
+    <script>
+       //  axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+        var vm = new Vue({
+                el:"#app",
+                data:{
+                    message:"test",
+                    flag:true,
+                    swt1:"active",
+                    swt2:"",
+                    uno:"",
+                    uname:"",
+                    upwd:"",
+                    ugender:""
+                },
+                methods:{
+                    lup(){
+                        this.flag=true;
+                        if(this.swt1==""){
+                            this.swt1="active"
+                            this.swt2=""
+                        }
+                    },
+                    lin(){
+                        this.flag=false;
+                        this.swt1=""
+                        this.swt2="active"
+                    },
+                    signup(){
+                        //console.log(this.uno+this.uname+this.ugender+this.upwd)
+                        this.$http.post('/user-signup',{
+                            phone:this.uno,
+                            password:this.upwd,
+                            name:this.uname,
+                            gender:this.ugender
+                        },{emulateJSON: true}).then(function (res) {
+                            console.log(res.body)
+                            if(res.body.status==200){
+                                // alert("注册成功")
+
+                                user={
+                                    phone:this.uno,
+
+                                }
+                                sessionStorage.setItem("user",JSON.stringify(user))
+                                window.location.href="/user-index"
+                            }
+
+                        })
+                    },
+                    signin(){
+
+                        this.$http.post('/login-user',{phone:this.uno,password:this.upwd},{emulateJSON:true}).then(
+                            function (res) {
+                                console.log(res.body)
+                                if(res.body.status==400){
+                                    alert(res.body.message)
+
+                                }else if(res.body.status==200){
+
+                                    // alert(res.body.message)
+                                    user={
+                                        phone:this.uno,
+
+                                    }
+                                    // console.log(user)
+                                    sessionStorage.setItem("user",JSON.stringify(user))
+                                    window.location.href="/user-index"
+                                }
+                            }
+                        )
+                        // this.uno=""
+                        // this.upwd=""
+
+                    }
+                    
+                }
+    
+            })
+        </script> 
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    
+  </body>
+</html>

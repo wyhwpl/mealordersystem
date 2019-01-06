@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.meal.mapper.FoodAndSellerMapper" >
+  <resultMap id="BaseResultMap" type="com.meal.pojo.FoodAndSeller" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="foodname" property="foodname" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="origin_price" property="originPrice" jdbcType="REAL" />
+    <result column="price" property="price" jdbcType="REAL" />
+    <result column="score" property="score" jdbcType="REAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="applicationtime" property="applicationtime" jdbcType="TIMESTAMP" />
+    <result column="thoughtime" property="thoughtime" jdbcType="TIMESTAMP" />
+    <result column="undercarriagetime" property="undercarriagetime" jdbcType="TIMESTAMP" />
+    <result column="img_URL" property="imgUrl" jdbcType="VARCHAR" />
+    <association property="seller" javaType="com.meal.pojo.Seller">
+      <id property="id" column="sellerID" jdbcType="VARCHAR" />
+      <result column="IDcard" property="idcard" jdbcType="VARCHAR" />
+      <result column="loginID" property="loginid" jdbcType="VARCHAR" />
+      <result column="sellername" property="sellername" jdbcType="VARCHAR" />
+      <result column="password" property="password" jdbcType="VARCHAR" />
+      <result column="phone" property="phone" jdbcType="VARCHAR" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+      <result column="status" property="status" jdbcType="INTEGER" />
+      <result column="reason" property="reason" jdbcType="VARCHAR" />
+      <result column="score" property="score" jdbcType="REAL" />
+      <result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
+      <result column="thoughtime" property="thoughtime" jdbcType="TIMESTAMP" />
+      <result column="logouttime" property="logouttime" jdbcType="TIMESTAMP" />
+      <result column="img_URL(1)" property="imgUrl" jdbcType="VARCHAR" />
+    </association>
+    <association property="tag" javaType="com.meal.pojo.Classify">
+      <id property="id" column="tagID" jdbcType="VARCHAR"/>
+      <result column="classifytag" property="classifytag" jdbcType="VARCHAR" />
+      <result column="sellerID" property="sellerid" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    *
+    from t_food f,t_classify c,t_seller s
+    where f.tagID=c.id and f.sellerID=s.id and f.id=#{id,jdbcType=VARCHAR}
+  </select>
+</mapper>

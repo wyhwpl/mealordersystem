@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/mealcommon/meal-common.iml" filepath="$PROJECT_DIR$/mealcommon/meal-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mealmanager/meal-manager.iml" filepath="$PROJECT_DIR$/mealmanager/meal-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mealparent/meal-parent.iml" filepath="$PROJECT_DIR$/mealparent/meal-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mealportal/meal-portal.iml" filepath="$PROJECT_DIR$/mealportal/meal-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mealrider/meal-rider.iml" filepath="$PROJECT_DIR$/mealrider/meal-rider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mealseller/meal-seller.iml" filepath="$PROJECT_DIR$/mealseller/meal-seller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mealuser/meal-user.iml" filepath="$PROJECT_DIR$/mealuser/meal-user.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,152 @@
+/*分页导航*/
+
+.portlet .portlet-body .page-nav{
+    width: 100%;
+    height: 40px;
+}
+.portlet .portlet-body .page-nav div{
+    display: none;
+}
+.portlet .portlet-body .page-nav .active{
+    display: block;
+}
+.portlet .portlet-body .page-nav div{
+    /*margin-left: 760px;*/
+    float: right;
+    height: 40px;
+}
+.portlet .portlet-body .page-nav .page-info{
+    float: left;
+    /*background-color: red;*/
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    line-height: 50px;
+}
+.row .navbar-nav{
+    float:none;
+    margin-left: 150px;
+    height: 112px;
+    line-height: 112px;
+}
+.row .navbar-nav .divider{
+    border-bottom: 1px solid #000;
+    /*width: 1px;*/
+}
+.row .navbar-nav li{
+    height: 112px;
+    line-height: 112px;
+    margin-right: 50px;
+}
+.row .navbar-nav li a{
+    float: left;
+    height: 112px;
+    line-height: 80px;
+}
+.row .navbar-nav li p{
+    float: left;
+}
+.row .navbar-nav li a img{
+    height: 80px;
+    line-height: 50px;
+}
+.row .navbar-nav li .head{
+    height: 40px;
+}
+.row .navbar-nav li div{
+    width: 100px;
+    text-align: center;
+    line-height: 40px;
+    margin-top: 10px;
+}
+.row .navbar-nav li span{
+    display: inline-block;
+    font-size: 20px;
+    color:red;
+    padding-right: 10px;
+}
+
+.hid .news li .task-checkbox i{
+    color:red;
+}
+
+
+.sellercenter{
+    text-align: center;
+}
+
+.info-seller-span span{
+    display: block;
+    margin-top: 6px;
+    height: 32px;
+    line-height: 32px;
+}
+.info-rider-span span{
+    display: block;
+    margin-top: 12px;
+    height: 32px;
+    line-height: 32px;
+}
+
+.info-rider-span .center{
+    padding-left: 45px;
+}
+
+
+.info-seller-span .center{
+    padding-left: 45px;
+}
+
+.row-top{
+    margin-top: 10px;
+}
+
+.clearfix-line{
+    margin-top: 10px;
+    height: 1px;
+    border-bottom: 1px solid #000;
+}
+.info-rider-label label{
+    text-align: center;
+    display: block;
+    margin-top: 12px;
+    height: 32px;
+    line-height: 32px;
+}
+.info-seller-label label{
+    text-align: center;
+    display: block;
+    margin-top: 6px;
+    height: 32px;
+    line-height: 32px;
+}
+.oprow{
+
+    padding-top: 10px;
+}
+
+.stats-overview-cont .details{
+    text-align: center;
+}
+.stats-overview-cont .details .title,.numbers{
+    /*color:white;*/
+}
+
+.stats-overview-cont .color-first{
+    /*background-color: #9966FF;*/
+}
+.stats-overview-cont .color-second{
+    /*background-color: #9966FF;*/
+}
+.stats-overview-cont .color-third{
+    /*background-color: #9966FF;*/
+}
+.stats-overview-cont .color-forth{
+    /*background-color: #9966FF;*/
+}
+.stats-overview-cont .color-fifth{
+    /*background-color: #9966FF;*/
+}
+.stats-overview-cont .color-sixth{
+    /*background-color: #9966FF;*/
+}

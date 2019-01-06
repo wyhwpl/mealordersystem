@@ -1,0 +1,630 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>店家主页</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!--<link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><!--<script src="../../assets/js/ie8-responsive-file-warning.js"></script>--><![endif]-->
+    <!--<script src="../../assets/js/ie-emulation-modes-warning.js"></script>-->
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="lib/bootstrap.min.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+      <script src="lib/echarts.common.min.js"></script>
+    <![endif]-->
+  </head>
+  <style>
+    #navbar a{
+        color:black;
+       
+    }
+    a {
+        font-family:"微软雅黑";
+        font-weight: bolder;
+        
+    }
+    a:link,a:visited 
+    {
+        color:#444;text-decoration:none;
+    }
+    a:hover {
+        color:#ff0000;
+    }       
+  </style>
+  <body style="background: url('static/bg-4.jpeg') no-repeat;background-size: 100%">
+  <div id="app">
+        <div id="head" >
+            <nav class="navbar navbar navbar-fixed-top" >
+                    <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">OnlineOrderingSystem</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="javascript:;" onclick="portal()" style="color:black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XX订餐系统</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                        <li><a href="javascript:;" onclick="portal()">首页</a></li>
+                        <li><a href="/seller-info">店铺信息</a></li>
+                        <li><a href="/shop-seller">店面装修</a></li>
+                        <li><a href="#"@click="logout">退出系统</a></li>
+                        </ul>
+                        <form class="navbar-form navbar-right">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        </form>
+                        
+                    </div>
+                </nav>
+        </div>
+        <br>       
+        <br>
+        <br>
+       
+    <div class="container"  style="opacity:1;">
+   
+      
+
+      <div class="row marketing">
+        <div class="col-lg-1"> </div>
+
+        <div class="col-lg-10">
+          <div class="col-sm-3 col-md-2 sidebar">
+                        
+            <br>
+              
+            
+                <ul class="nav nav-sidebar">
+                    <li><a href=""@click.prevent="changeto1">最近订单</a></li>
+                    <li><a href=""@click.prevent="changeto2">销量统计</a></li>
+                </ul>
+            
+            
+          </div>
+          <div class="col-sm-9  col-md-10">
+            <br>
+            
+              <div v-show="flag">
+                  <ul id="myTab" class="nav nav-tabs">
+                      <li class="active"><a href="#unhandled" data-toggle="tab">未处理</a></li>
+                      <li><a href="#handling" data-toggle="tab">配送中</a></li>
+                      <li ><a href="#handled" data-toggle="tab">已完成</a></li>
+                  </ul>
+                  <div id="myTabContent" class="tab-content">
+                      <div class="tab-pane fade in active" id="unhandled">
+                        
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>订单信息</th>
+                              <th>用户信息</th>
+                              <th>金额</th>
+                              <th>操作</th>
+                            </tr>
+                          </thead>
+                          <tbody v-for="item in unhandledList":key="item.order.id">
+
+                            <tr class="warning" @click="showDetails(item)" >
+
+                                <td>
+
+                                    <p>订单号：{{item.order.id}}</p>
+                                    <br>
+                                    <p>下单时间：{{timetransfer(item.order.ordertime)}} </p>
+
+
+                                </td>
+                                <td>
+
+                                    <p>用户名称：{{item.order.username}}</p>
+                                                <p>用户地址：{{item.order.address}}</p>
+                                    <p>用户电话：{{item.order.phone}}</p>
+                                </td>
+                                <td><p></p><br><p>￥{{item.order.totalPrice}}</p></td>
+                                <td>
+                                    <br>
+                                    <button type="button" class="btn btn-danger"@click.stop="rejectOrder(item.order.id)">拒绝</button>
+                                    <button type="button" class="btn btn-success"@click.stop="acceptOrder(item.order.id)">接受</button>
+                                </td>
+                            </tr>
+                            <tr v-if="item.flag">
+
+                                <td colspan="4">
+                                    <div class="container-fluid">
+                                        <div id="details" class="col-md-6"style="color: #222222;">
+                                            <h5 style="font-weight: bolder;">订单详情</h5>
+
+                                            <table class="table table-hover">
+
+                                                <tbody v-for="food in item.orderFoods":key="food.orderFood.foodid">
+                                                <tr>
+                                                    <td>{{food.foodname}}</td>
+                                                    <td>{{food.orderFood.copies}}</td>
+                                                    <td>￥{{food.foodprice*food.orderFood.copies}}</td>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <h5 style="text-align: center;font-weight: bolder;">餐盒费：￥2</h5>
+                                            <h5 style="text-align: center;font-weight: bolder;">配送费：￥3</h5>
+                                            <h5 style="text-align: center;font-weight: bolder;">实际支付：￥{{item.order.totalPrice}}</h5>
+                                            <br>
+                                            <br>
+                                            <br>
+
+
+
+
+                                        </div>
+                                        <div class="col-md-6" id="comment">
+                                            <div style="background-color:aliceblue">
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                    <th>用户详情</th>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td><p>地址：{{item.order.address }}</p></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><p>姓名：{{item.order.username}}</p></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><p>电话：{{item.order.phone}}</p></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><p>备注：无</p></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <p>订单有些问题？您可以拨打上面用户电话联系ta</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                        
+                      </div>
+                      <div class="tab-pane fade " id="handling">
+                        
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                                <th>订单信息</th>
+                                <th>用户信息</th>
+
+                                <th>金额</th>
+                                <th>骑手信息</th>
+                            </tr>
+                          </thead>
+                          <tbody v-for="item in handlingList":key="item.order.id">
+                          <tr class="warning" @click="showDetails(item)" >
+
+                              <td>
+
+                                  <p>订单号：{{item.order.id}}</p>
+                                  <br>
+                                  <p>下单时间：{{timetransfer(item.order.ordertime)}} </p>
+
+
+                              </td>
+                              <td>
+
+                                  <p>用户名称：{{item.order.username}}</p>
+                                  <p>用户地址：{{item.order.address}}</p>
+                                  <p>用户电话：{{item.order.phone}}</p>
+                              </td>
+                              <td><p></p><br><p>￥{{item.order.totalPrice}}</p></td>
+                              <td>
+                                  <p>骑手id：{{item.order.riderid}}</p>
+                                  <p>骑手电话：{{item.order.riderphone}}</p>
+                                  <p>骑手评分：4.7</p>
+                              </td>
+                          </tr>
+                          <tr v-if="item.flag">
+
+                              <td colspan="4">
+                                  <div class="container-fluid">
+                                      <div  class="col-md-6"style="color: #222222;">
+                                          <h5 style="font-weight: bolder;">订单详情</h5>
+
+                                          <table class="table table-hover">
+
+                                              <tbody v-for="food in item.orderFoods":key="food.orderFood.foodid">
+                                              <tr>
+                                                  <td>{{food.foodname}}</td>
+                                                  <td>{{food.orderFood.copies}}</td>
+                                                  <td>￥{{food.foodprice*food.orderFood.copies}}</td>
+
+                                              </tr>
+                                              </tbody>
+                                          </table>
+                                          <h5 style="text-align: center;font-weight: bolder;">餐盒费：￥2</h5>
+                                          <h5 style="text-align: center;font-weight: bolder;">配送费：￥3</h5>
+                                          <h5 style="text-align: center;font-weight: bolder;">实际支付：￥{{item.order.totalPrice}}</h5>
+                                          <br>
+                                          <br>
+                                          <br>
+
+
+
+
+                                      </div>
+                                      <div class="col-md-6" >
+                                          <div style="background-color:aliceblue">
+
+                                              <table class="table table-hover">
+                                                  <thead>
+                                                  <th>用户详情</th>
+                                                  </thead>
+                                                  <tbody>
+                                                  <tr>
+                                                      <td><p>地址：{{item.order.address }}</p></td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td><p>姓名：{{item.order.username}}</p></td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td><p>电话：{{item.order.phone}}</p></td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td><p>备注：无</p></td>
+                                                  </tr>
+                                                  </tbody>
+                                              </table>
+
+
+
+
+
+                                          </div>
+                                      </div>
+                                      <div style="text-align: center;">
+                                          <br>
+                                          <br>
+                                          <br>
+                                          <p>订单有些问题？您可以拨打上面用户电话联系ta</p>
+                                      </div>
+                                  </div>
+                              </td>
+                          </tr>
+
+                          </tbody>
+                        </table>
+                        
+                      </div>
+                      <div class="tab-pane fade " id="handled">
+                          <table class="table table-hover">
+                              <thead>
+                              <tr>
+                                  <th>订单信息</th>
+                                  <th>用户信息</th>
+
+                                  <th>金额</th>
+                                  <th>骑手信息</th>
+                              </tr>
+                              </thead>
+                              <tbody v-for="item in finishedList":key="item.order.id">
+                              <tr class="warning" @click="showDetails(item)" >
+
+                                  <td>
+
+                                      <p>订单号：{{item.order.id}}</p>
+                                      <br>
+                                      <p>下单时间：{{timetransfer(item.order.ordertime)}} </p>
+
+
+                                  </td>
+                                  <td>
+
+                                      <p>用户名称：{{item.order.username}}</p>
+                                      <p>用户地址：{{item.order.address}}</p>
+                                      <p>用户电话：{{item.order.phone}}</p>
+                                  </td>
+                                  <td><p></p><br><p>￥{{item.order.totalPrice}}</p></td>
+                                  <td>
+                                      <p>骑手id：{{item.order.riderid}}</p>
+                                      <p>骑手电话：{{item.order.riderphone}}</p>
+                                      <p>骑手评分：4.7</p>
+                                  </td>
+                              </tr>
+                              <tr v-if="item.flag">
+
+                                  <td colspan="4">
+                                      <div class="container-fluid">
+                                          <div  class="col-md-6"style="color: #222222;">
+                                              <h5 style="font-weight: bolder;">订单详情</h5>
+
+                                              <table class="table table-hover">
+
+                                                  <tbody v-for="food in item.orderFoods":key="food.orderFood.foodid">
+                                                  <tr>
+                                                      <td>{{food.foodname}}</td>
+                                                      <td>{{food.orderFood.copies}}</td>
+                                                      <td>￥{{food.foodprice*food.orderFood.copies}}</td>
+
+                                                  </tr>
+                                                  </tbody>
+                                              </table>
+                                              <h5 style="text-align: center;font-weight: bolder;">餐盒费：￥2</h5>
+                                              <h5 style="text-align: center;font-weight: bolder;">配送费：￥3</h5>
+                                              <h5 style="text-align: center;font-weight: bolder;">实际支付：￥{{item.order.totalPrice}}</h5>
+                                              <br>
+                                              <br>
+                                              <br>
+
+
+
+
+                                          </div>
+                                          <div class="col-md-6" >
+                                              <div style="background-color:aliceblue">
+
+                                                  <table class="table table-hover">
+                                                      <thead>
+                                                      <th>用户详情</th>
+                                                      </thead>
+                                                      <tbody>
+                                                      <tr>
+                                                          <td><p>地址：{{item.order.address }}</p></td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td><p>姓名：{{item.order.username}}</p></td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td><p>电话：{{item.order.phone}}</p></td>
+                                                      </tr>
+                                                      <tr>
+                                                          <td><p>备注：无</p></td>
+                                                      </tr>
+                                                      </tbody>
+                                                  </table>
+
+
+
+
+
+                                              </div>
+                                          </div>
+                                          <div style="text-align: center;">
+                                              <br>
+                                              <br>
+                                              <br>
+                                              <p>订单有些问题？您可以拨打上面用户电话联系ta</p>
+                                          </div>
+                                      </div>
+                                  </td>
+                              </tr>
+                              </tbody>
+                          </table>
+
+                        
+                      </div>
+                  </div>
+              </div>
+              <div v-show="!flag">
+                
+                <div >
+                    <iframe id="mychart" src="jsp/echart.html" frameborder="0" style="width: 900px;height: 500px;"></iframe>
+                    <!--<div id="main" style="width: 600px;height:400px;"></div>-->
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-lg-1"></div>
+      </div>
+
+      
+    </div> <!-- /container -->
+  </div>
+<script>
+        
+      var vm=new Vue({
+        el:"#app",
+        data:{
+            flag:true,
+            fullList:[],
+            unhandledList:[
+
+            ],
+            handlingList:[
+
+            ],
+            finishedList:[],
+            sales:[]
+        },
+        methods:{
+              changeto2(){
+
+                this.flag=false
+              },
+            showDetails(obj){
+
+                console.log(obj)
+                obj.flag=!obj.flag
+
+                this.$forceUpdate();
+
+            },timetransfer(unixtimestamp){
+
+
+                var unixtimestamp = new Date(unixtimestamp);
+                var year = 1900 + unixtimestamp.getYear();
+                var month = "0" + (unixtimestamp.getMonth() + 1);
+                var date = "0" + unixtimestamp.getDate();
+                var hour = "0" + unixtimestamp.getHours();
+                var minute = "0" + unixtimestamp.getMinutes();
+                var second = "0" + unixtimestamp.getSeconds();
+                return year + "-" + month.substring(month.length-2, month.length)  + "-" + date.substring(date.length-2, date.length)
+                    + " " + hour.substring(hour.length-2, hour.length) + ":"
+                    + minute.substring(minute.length-2, minute.length) + ":"
+                    + second.substring(second.length-2, second.length);
+
+
+            },
+            timetransfer2(unixtimestamp){
+
+
+                var unixtimestamp = new Date(unixtimestamp);
+                var year = 1900 + unixtimestamp.getYear();
+                var month = "0" + (unixtimestamp.getMonth() + 1);
+                var date = "0" + unixtimestamp.getDate();
+
+                return  month.substring(month.length-2, month.length)  + "-" + date.substring(date.length-2, date.length);
+
+
+            },
+          changeto1(){
+            this.flag=true
+          },
+            logout(){
+              sessionStorage.removeItem("sellerphone");
+              window.location.href="/login"
+            },
+            rejectOrder(orderid){
+                  this.$http.post('/rejectOrder',{orderid:orderid},{
+                      emulateJSON:true
+                  }).then(
+                      function (res) {
+                          console.log(res.body)
+                          this.initList()
+                          this.getorder()
+                          this.$forceUpdate()
+                      }
+                  )
+            },
+            initList(){
+                this.unhandledList=[]
+                this.handlingList=[]
+                this.finishedList=[]
+            },
+            acceptOrder(orderid){
+                this.$http.post('/acceptOrder',{orderid:orderid},{
+                    emulateJSON:true
+                }).then(
+                    function (res) {
+                        console.log(res.body)
+                        this.initList()
+                        this.getorder()
+                        this.$forceUpdate()
+                    }
+                )
+            },
+            getorder(){
+                var id=sessionStorage.getItem("sellerphone")
+                if(id==null||id==""){
+                    alert("请先登录")
+                    window.location.href="/login"
+                    return ;
+                }
+               // console.log(id)
+                this.$http.post("/getorder",{sellerid:id},{emulateJSON:true}).then(
+                   function (res) {
+
+                       var orderList=res.body
+                       if(orderList!=null){
+                           for(var i=0;i<orderList.length;i++){
+                               // orderList[i].showflag=false;
+                               if(orderList[i].order.status==1){
+                                   this.unhandledList.push(orderList[i])
+                               }
+                               else if(orderList[i].order.status>=5){
+                                   this.finishedList.push(orderList[i])
+                               }else{
+                                   this.handlingList.push(orderList[i])
+                               }
+                           }
+                       }
+                   }
+               )
+            },
+            getSale(){
+                var id=sessionStorage.getItem("sellerphone")
+                if(id==null||id==""){
+                    alert("请先登录")
+                    window.location.href="/login"
+                    return ;
+                }
+                this.$http.post('/getSale',{loginid:id},{
+                    emulateJSON:true
+                }).then(function (res) {
+                    // console.log(res.body)
+                    this.sales=res.body
+                    if(this.sales==null) return ;
+                    for(var i=0;i<this.sales.length;i++){
+                        this.sales[i].time=this.timetransfer2(this.sales[i].time)
+                    }
+                })
+            },
+            access(){
+                  // var subframe=document.getElementById("mychart").contentWindow
+                  console.log(this.sales)
+                  return this.sales
+
+            }
+
+        },
+          created(){
+              this.getorder()
+              this.getSale()
+
+          }
+      });
+      function access(){
+          console.log(vm.sales)
+          return vm.sales
+      }
+      function refresh() {
+          vm.getorder()
+      }
+      setInterval(refresh,30000)
+        
+    </script>
+    
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+        function portal() {
+            window.location.href="http://localhost:8080"
+        }
+    </script>
+  </body>
+</html>

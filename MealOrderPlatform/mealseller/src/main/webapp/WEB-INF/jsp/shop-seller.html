@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>本店装修</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+    a {
+        font-family:"微软雅黑";
+        font-weight: bolder;
+
+    }
+    a:link,a:visited
+    {
+        color:#444;text-decoration:none;
+    }
+    a:hover {
+        color:#ff0000;
+    }
+
+    #cart {
+        position:fixed;
+    }
+
+</style>
+
+<body>
+
+
+<div class="container" id="container">
+
+    <!--<div class="col-lg-1">-->
+    <!--</div>-->
+    <div class="col-lg-12">
+        <div>
+            <h1>欢迎光临本店</h1>
+
+            <table class="table table-hover">
+
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="container-fluid" >
+                            <div class="col-md-3">
+                                <img :src="getshopimg()" @click="uptotalimg()"class="img-responsive" title="点击更换图片"alt="Image"style="height: 80px;">
+
+                            </div>
+                            <div class="col-md-5">
+                                <a href="">{{seller.sellername}}</a>
+                                <p>评分：4.7 </p>
+                                <p>起送￥15&nbsp;配送费￥2.5</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div v-show="totalflag" >
+                                    <input type="file"  @change="getFile($event)" id="TotalImg" class="btn-primary btn-sm" value="上传图片" >
+                                    <br>
+                                    <button class="btn btn-primary pull-right " @click="submit($event)">上传</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div>
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active">
+                    <a href="#menu" data-toggle="tab">
+                        菜单列表
+                    </a>
+                </li>
+
+
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="menu">
+
+                    <div class="col-sm-3  col-md-2" >
+                        <button type="button" data-toggle="modal" data-target="#myModal"class="btn btn-warning">添加菜单</button>
+                        <ul class="nav nav-pills nav-stacked "v-for="item in typeList":key="item.typeId">
+                            <li>
+                                <a :href="tohref(item.typeName)">{{item.typeName}}</a>
+
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="col-sm-9  col-md-10">
+                        <div v-for="item in typeList":key="item.typeId">
+                            <div :id="item.typeName">
+                                <table class="table table-hover">
+                                    <thead>
+
+                                        <th>{{item.typeName}} </th>
+                                        <th><button type="button"class="btn btn-warning btn-sm"@click="delmenu(item.typeId)">删除菜单</button><button type="button"@click="addfood(item.typeId)"data-toggle="modal" data-target="#myModal2"class="btn btn-warning btn-sm">添加菜品</button></th>
+                                        <th>操作</th>
+
+                                    </thead>
+                                    <tbody v-for="food in item.foods":key="food.id">
+                                    <tr>
+                                        <td>
+                                            <div class="col-md-3">
+                                                <img :src="getfoodimg(food.imgUrl)" @click="upfoodimg(food.id)" title="点击更换图片"class="img-responsive" alt="Image"style="height: 75px;">
+
+                                            </div>
+                                            <div class="col-md-9">
+                                                <p style="font-weight: bolder">{{food.foodname}}</p>
+                                                <p>描述：{{food.description}}</p>
+                                                <p>评分：4.7 </p>
+
+                                            </div>
+                                        </td>
+                                        <td>
+
+                                            <br>
+                                            <p></p>
+                                            单价：￥{{food.price}}
+                                        </td>
+                                        <td>
+                                            <br>
+                                            <button type="button" @click="updatefood(food)"data-toggle="modal" data-target="#myModal3"style="width: 50px;height: 50px;border-radius: 50%;border: none;" class="btn-success ">修改价格</button>
+                                            <button type="button" @click="updatefood(food)"data-toggle="modal" data-target="#myModal3"style="width: 50px;height: 50px;border-radius: 50%;border: none;" class="btn-success ">修改菜名</button>
+                                            <button type="button" @click="updatefood(food)"data-toggle="modal" data-target="#myModal3"style="width: 50px;height: 50px;border-radius: 50%;border: none;" class="btn-success ">添加描述</button>
+                                            <button type="button" @click="delfood(food.id)"style="width: 50px;height: 50px;border-radius: 50%;border: none;" class="btn-success ">删除该菜</button>
+                                        </td>
+                                        <!--<td>-->
+                                            <!--<div >-->
+                                                <!--<input type="file"  @change="getFile($event)" id="upimg" class="btn-warning btn-sm" value="上传头像" >-->
+                                                <!--<br>-->
+                                                <!--<button class="btn btn-warning pull-right " @click="submit($event)">上传</button>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"style="text-align: center">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="closemodal"class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        添加菜单
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    请输入菜单名：<input type="text"class="btn-default"v-model="newmenu">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary"@click="addmenu">
+                        确认
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"style="text-align: center">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="closemodal2"class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel2">
+                        添加菜品
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <h5>请输入菜品名：<input type="text"class="btn-default"v-model="foodname"></h5>
+                    <h5>请输入菜品描述：<input type="text"class="btn-default"v-model="fooddesc"></h5>
+                    <h5>请输入菜品价格：<input type="text"class="btn-default"v-model="foodprice"></h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary"@click="addfoodcommit">
+                        确认
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"style="text-align: center">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="closemodal3"class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel3">
+                        更新菜品信息
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <h5>菜品名：<input type="text"class="btn-default"v-model="curfood.foodname"></h5>
+                    <h5>菜品描述：<input type="text"class="btn-default"v-model="curfood.description"></h5>
+                    <h5>菜品价格：<input type="text"class="btn-default"v-model="curfood.price"></h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary"@click="updatefoodcommit">
+                        确认
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+
+
+</div><!--/.container-->
+<script>
+    var vm=new Vue({
+        el:"#container",
+        data:{
+            seller:{},
+            typeList:[],
+            sellerid:"",
+            file:{},
+            totalflag:false,
+            curid:"",
+            newmenu:"",
+            curmenuid:"",
+            foodname:"",
+            fooddesc:"",
+            foodprice:"",
+            curfood:{}
+
+
+
+        },
+        methods:{
+            uptotalimg(){
+                document.getElementById("TotalImg").click()
+                this.totalflag=true;
+            },
+            upfoodimg(foodid){
+                document.getElementById("TotalImg").click()
+                this.totalflag=true;
+                this.curid=foodid
+            },
+            tohref(str){
+                return "#"+str
+            },
+            getshopimg(){
+                if(this.seller.imgUrl==null||this.seller.imgUrl==""){
+                    return "static/bg-1.jpg"
+                }
+                else{
+                    return this.seller.imgUrl
+                }
+            },
+            addmenu(){
+                if(this.newmenu=="")
+                {
+                    alert("菜单名称不能为空")
+                    return
+                }
+                // alert(this.newmenu)
+                this.$http.post('/addmenu',{
+                    sellerid:this.seller.id,
+                    menuname:this.newmenu
+                    },
+                    {
+                    emulateJSON:true
+                    }).then(function (res) {
+                    console.log(res.body)
+                    this.getsellerinfo()
+                    document.getElementById("closemodal").click()
+                    this.$forceUpdate()
+                })
+
+            },
+            delmenu(id){
+              this.$http.post('/delmenu',{
+                  menuid:id
+              },{
+                  emulateJSON:true
+              }).then(function (res) {
+                  this.getsellerinfo()
+                  this.$forceUpdate()
+              })
+            },
+            addfood(id){
+                this.curmenuid=id
+            },
+            addfoodcommit(){
+                var name=this.foodname
+                var desc=this.fooddesc
+                var price=this.foodprice
+                if(name==""||desc==""||price==""){
+                    alert("字段不能为空")
+                    return
+                }
+                this.$http.post('/addfood',{
+                    sellerid:this.seller.id,
+                    tagid:this.curmenuid,
+                    foodname:name,
+                    fooddesc:desc,
+                    foodprice:price
+                },{
+                    emulateJSON:true
+                }).then(function (res) {
+                    this.getsellerinfo()
+                    document.getElementById("closemodal2").click()
+                    this.$forceUpdate()
+                })
+            },
+            delfood(foodid){
+                this.$http.post('/delfood',{
+                    foodid:foodid
+                },{
+                    emulateJSON:true
+                }).then(function (value) {
+                    this.getsellerinfo()
+                    this.$forceUpdate()
+                })
+            },
+            updatefood(obj){
+                this.curfood=obj
+            },
+            updatefoodcommit(){
+                this.$http.post('/updatefood',{
+
+                    foodid:this.curfood.id,
+                    foodname:this.curfood.foodname,
+                    fooddesc:this.curfood.description,
+                    foodprice:this.curfood.price
+                },{
+                    emulateJSON:true
+                }).then(function (res) {
+                    this.getsellerinfo()
+                    document.getElementById("closemodal3").click()
+                    this.$forceUpdate()
+                })
+            },
+            getfoodimg(imgUrl){
+                if(imgUrl==null||imgUrl==""){
+                    return "static/bg-1.jpg"
+                }else{
+                    return imgUrl
+                }
+            },
+            getFile(event){
+                this.file = event.target.files[0];
+                // console.log(this.file);
+            },
+            submit(event){
+                this.totalflag=false
+                event.preventDefault();
+                var  formData = new window.FormData();
+                formData.append("file", this.file);
+                if(this.curid==""){
+                    formData.append("sellerid",this.seller.id);
+                    this.$http.post('/upsellerimg',formData,{
+                        emulateJSON:true
+                    }).then(
+                        function (res) {
+                            // console.log(res.body)
+                            this.getsellerinfo()
+                            this.$forceUpdate()
+                        }
+                    )
+                }else{
+                    formData.append("foodid",this.curid)
+                    this.$http.post('/upfoodimg',formData,{
+                        emulateJSON:true
+                    }).then(
+                        function (res) {
+                           // console.log(res.body)
+                            this.curid=""
+                            this.getsellerinfo()
+                            this.$forceUpdate()
+                        }
+                    )
+                }
+
+
+
+
+
+            },
+            getsellerinfo(){
+                var sellerphone = sessionStorage.getItem("sellerphone")
+
+                if(sellerphone==null||sellerphone==""){
+                    window.location.href="/login"
+                }else{
+
+                    this.$http.post('/getsellerinfo',{sellerphone:sellerphone},{emulateJSON:true}).then(
+                        function (res) {
+
+                            this.seller=res.body
+                            this.sellerid=this.seller.id
+                            //console.log(this.sellerid)
+                            this.getfoodInfo()
+                        }
+                    )
+                }
+            },
+            getfoodInfo(){
+
+                var id=this.sellerid
+                //console.log(this.sellerid)
+                this.$http.post("/foodinfo",{sellerid:id}
+                    ,{emulateJSON:true}).then(
+                    function (res) {
+                        // console.log(res.body)
+                        this.typeList=res.body.typeList
+
+                    }
+                )
+            },
+
+
+        },
+        created(){
+            this.getsellerinfo()
+
+
+
+        }
+    })
+</script>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="offcanvas.js"></script>
+</body>
+</html>

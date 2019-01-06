@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="meal-common" />
+        <module name="meal-manager" />
+        <module name="meal-portal" />
+        <module name="meal-rider" />
+        <module name="meal-seller" />
+        <module name="meal-user" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="meal-common" target="1.5" />
+      <module name="meal-manager" target="1.5" />
+      <module name="meal-parent" target="1.5" />
+      <module name="meal-portal" target="1.5" />
+      <module name="meal-rider" target="1.5" />
+      <module name="meal-seller" target="7" />
+      <module name="meal-user" target="7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

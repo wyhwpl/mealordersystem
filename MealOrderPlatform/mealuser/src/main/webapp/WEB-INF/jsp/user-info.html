@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>个人信息</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <!-- <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+      <script src="lib/md5.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <style>
+        /* body {
+            padding-top: 2.5em;
+             background-color: #666; 
+            color: #333;
+            font-size: 84%;
+            font-family: "微软雅黑", "Yahei Mono";
+        } */
+        /* a {
+            color: #fff;
+            position:absolute;
+            right: 1%;
+            top: 5px;
+        } */
+        .title {
+            margin: 15px 0;
+            text-align:center;
+            font-weight: bolder;
+        }
+        .page {
+            width: 400px;
+            height: 130px;
+            line-height: 6px;
+            margin: 0 auto;
+            padding: 15px 0 29px;
+            background-color: #f4f39e;
+            
+            -moz-border-radius-bottomleft: 20px 500px;
+            -moz-border-radius-bottomright: 500px 30px;
+            -moz-border-radius-topright: 5px 100px;	
+            
+            -webkit-border-bottom-left-radius: 20px 500px;
+            -webkit-border-bottom-right-radius: 500px 30px;
+            -webkit-border-top-right-radius: 5px 100px;
+            
+            border-bottom-left-radius: 20px 500px;
+            border-bottom-right-radius: 500px 30px;
+            border-top-right-radius: 5px 100px;
+            
+            background: 
+                -moz-repeating-linear-gradient(
+                    top,
+                    #fcf59b,
+                    #fcf59b 29px,
+                    #81cbbc 30px
+                );
+            
+            background: 
+                -webkit-gradient(
+                    linear,
+                    left top, left bottom,
+                    from(#81cbbc),
+                    color-stop(2%, #fcf59b)
+                );
+                
+            background: 
+                repeating-linear-gradient(
+                    top,
+                    #fcf59b,
+                    #fcf59b 29px,
+                    #81cbbc 30px
+                );		
+                
+            /* -webkit-background-size: 100% 30px; */
+        
+            -moz-box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+            
+            text-shadow: 0 1px 0 #F6EF97;
+            position: relative;
+        }
+        .page:after {
+            width: 180px;
+            height: 30px;
+            content: " ";
+            margin-left: -90px;
+            border: 1px solid rgba(200, 200, 200, .8);
+            
+            background: rgba(254, 254, 254, .6);
+            -moz-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+            -webkit-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0 3px rgba(0, 0, 0, 0.1);
+            
+            -moz-transform: rotate(-5deg); 
+            -webkit-transform: rotate(-5deg);
+            -o-transform: rotate(-5deg);
+            transform: rotate(-5deg);
+            
+            position: absolute;
+            left: 50%;
+            top: -15px;
+        }
+        .page p {
+            margin: 20px 0;
+            padding: 0 2em;
+        }
+        </style>
+  <body>
+
+    
+    
+<div class="container" id="app">
+
+    <div class="col-lg-2"></div> 
+    
+        
+    <div class="container-fluid col-lg-8" >
+
+        <div class="jumbotron" style="height: 200px;">
+            <div class="col-lg-4">
+                 <div class="placeholder">
+                    <img :src="imageurl" class="img" width="100" height="100"  alt="头像">
+                    <h4 class="pull-right"style="font-weight: bolder;">{{ userinfo.username }}</h4>
+                    <!-- <span class="text-muted">Something else</span> -->
+                </div> 
+            </div>
+            <div class="col-lg-8">
+                   <!-- <h4 style="font-weight: bolder">个人签名：</h4> -->
+                   <div class="page">
+                        <h4 class="title">个人签名</h4>
+                        <p>{{signature}}</p>
+                        
+                    </div>
+                   <!-- <label>{{signature}}</label> -->
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href=""@click.prevent="show(1)">信息总览 </a></li>
+                    <!-- <li><a href="#">信息总览</a></li> -->
+                    <li><a href="" @click.prevent="show(2)">上传头像</a></li>
+                    <li><a href="" @click.prevent="show(3)">修改密码</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    
+                    <li><a href=""@click.prevent="show(4)">我的红包</a></li>
+                    <li><a href=""@click.prevent="show(5)">地址管理</a></li>
+                    <li><a href="./user-index.html">返回主页</a></li>
+                    <!-- <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                    <li><a href="">More navigation</a></li> -->
+                </ul>
+                <!-- <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                </ul> -->
+            </div>
+            <div class="col-sm-9  col-md-10">
+            <!-- <h2 class="page-header">Dashboard</h2> -->
+
+                <div class="row placeholders"v-show="flag1">
+                    <div class="col-xs-6 col-sm-4 placeholder">
+                        
+                        <h2>
+                            <span class="label label-danger">懒是一种境界</span>
+                           
+                          </h2>
+                        <h3>
+                            <span class="label label-default">拖延症患者</span>
+                            <span class="label label-info">吃货</span>
+                          </h3>
+                           <h4>
+                          
+                            
+                            <span class="label label-success">外卖小王子</span>
+                           
+                          </h4>
+                          <h5>
+                            
+                            <span class="label label-primary">美食达人</span>
+                           
+                          </h5>
+                          <h6>
+                           
+                            <span class="label label-info">一个人养活一家店</span>
+                            
+                          </h6>
+                      
+                        
+                    </div> 
+                    <div class="col-xs-6 col-sm-7 placeholder"style="background:url('./static/bg-3.jpeg') no-repeat;backgroundsize:100%;">
+                        <br>
+                        <h4>用户名：{{ userinfo.username }}</h4>
+                        <h4>注册手机号：{{ userinfo.phone }}</h4>
+                        <h4>性别：{{userinfo.sex}}</h4>
+                        <h4>注册时间：{{regdate}}</h4>
+                        <h4>最近登录：{{lastdate}}</h4>
+                        <br>
+                        <br>
+                       
+                    </div>
+                    <!-- <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Label</h4>
+                    <span class="text-muted">Something else</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Label</h4>
+                    <span class="text-muted">Something else</span>
+                    </div>  -->
+                </div>
+
+                <div class="row placeholders"v-show="flag2">
+                    <div class="col-xs-6 col-sm-4 placeholder">
+                        <h4>  <span class="text-muted">当前头像</span></h4>  
+                        <img :src="imageurl" width="200" height="200" @click="uploadimg" title="点击编辑您的头像"class="img-responsive" alt="Generic placeholder thumbnail">
+
+                        <div :style="style">
+                            <input type="file"  @change="getFile($event)" id="upimg" class="btn-warning btn-sm" value="上传头像" >
+                            <br>
+                            <button class="btn btn-warning pull-right " @click="submit($event)">上传</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 placeholder">
+
+                    </div>
+                </div>
+                <div v-if="flag3">
+                    <br>
+                    <form action="" method="POST" role="form">
+                        <legend>修改密码</legend>
+                    
+                        <div class="form-group">
+                          
+                            <label >请输入原密码：</label>
+                            <input v-model="oldpwd" type="password" class="input-medium"  placeholder="原密码">
+                       
+                        </div>
+                        <div class="form-group">
+                          
+                            <label >请输入新密码：</label>
+                            <input v-model="newpwd" type="password" class="input-medium"  placeholder="新密码">
+                           
+                        </div>
+                        
+                    
+                        <button type="" class="btn btn-primary"@click.prevent="changepwd">确认修改</button>
+                    </form>
+                </div>
+                <div class="table-responsive" v-show="flag4">
+                    <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th>序号</th>
+                        <th>类别</th>
+                        <th>金额</th>
+                        <th>有效时间</th> 
+                        <th></th>
+                        </tr>
+                    </thead>
+                    <tbody v-for="item in fitsList ":key="item.id">
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.amount}}</td>
+                            <td>{{item.efftime}}</td>
+                            <td><a href="/user-index">去使用</a></td>
+                        </tr>
+                      
+                        
+                    </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive" v-show="flag5">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>地址</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody v-for="(item,index) in addrList ":key="item.addrid">
+                        <tr>
+                            <td>{{index + 1}}</td>
+                            <td>{{item.addrdesc}}</td>
+                            <td><a href="#"@click.prevent="lastuse(item.addrid)">设为默认地址</a></td>
+                            <td><a href="#" @click.prevent="deladdr(item.addrid)">删除</a></td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <div class="pull-right">
+                        <input v-model="newaddr" type="text" class="input-lg"  placeholder="新地址">
+                        <button class="btn btn-warning " type="button" @click="addnewAddr">添加新地址</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-2"></div>
+</div>
+    <script>
+        var vm=new Vue({
+            el:"#app",
+            data:{
+                userinfo:{},
+                imageurl:"",
+                username:"懒癌晚期患者",
+                userno:"13236532766",
+                signature:"这个人真的很懒，什么都没留下...",
+                style:"display: none;",
+                file:"",
+                oldpwd:"",
+                newpwd:"",
+                newaddr:"",
+                regdate:"Tue Nov 19 2018",
+                lastdate:new Date().toDateString(),
+                flag1:true,
+                flag2:false,
+                flag3:false,
+                flag4:false,
+                flag5:false,
+                addrList:[],
+                fitsList:[
+                    {
+                        id:1,type:"店铺红包（仅限XX店里使用）",amount:3.5,efftime:"2018.12.16-2018.12.19"
+                    },
+                    {
+                        id:2,type:"店铺红包（仅限XX店里使用）",amount:4.5,efftime:"2018.12.16-2018.12.19"
+                    }
+                ]
+            },
+            methods:{
+                init_flags(){
+                    this.flag1=false
+                    this.flag2=false
+                    this.flag3=false
+                    this.flag4=false
+                    this.flag5=false
+                },
+                uploadimg(){
+                    document.getElementById("upimg").click()
+                    this.style=""
+                },
+                getFile(event){
+                    this.file = event.target.files[0];
+                    console.log(this.file);
+                },
+                submit(event){
+                    event.preventDefault();
+                    var  formData = new window.FormData();
+                    formData.append("file", this.file);
+                    formData.append("id",this.userinfo.id);
+                    this.$http.post('/uploadimg',formData,{
+                        emulateJSON:true
+                    }).then(
+                        function (res) {
+                            console.log(res.body)
+                        }
+                    )
+                    this.getinfo()
+                    //console.log("success")
+                    window.location.href="/user-info"
+
+                },
+                show(flag){
+                    this.init_flags()
+                    switch(flag){
+                        case 1:
+                            this.flag1=true
+                            break
+                        case 2:
+                            this.flag2=true
+                            break
+                        case 3:
+                            this.flag3=true
+                            break
+                        case 4:
+                            this.flag4=true
+                            break
+                        case 5:
+                            this.flag5=true
+                            this.getAddrs()
+                            break
+                   }
+                    
+                },
+                changepwd(){
+                    var pwd=hex_md5(this.oldpwd)
+                    if(pwd!=this.userinfo.password){
+                        alert("原密码错误！")
+                    }
+                    else{
+                        this.$http.post('/changepwd',{
+                            userId:this.userinfo.id,
+                            newPwd:this.newpwd
+                        },{emulateJSON:true}).then(function (res) {
+                            if(res.body==1){
+                                alert("修改密码成功")
+                            }else{
+                                alert("修改失败！")
+                            }
+                        })
+                    }
+                },
+                getinfo(){
+                    var user = JSON.parse(sessionStorage.getItem("user"))
+                    if(user==null||user.phone==""){
+                        window.location.href="/login"
+                    }else{
+                        var phone=user.phone
+                        this.$http.post('/user-info',{phone:phone},{emulateJSON:true}).then(
+                            function (res) {
+                                this.userinfo=res.body
+                                if(this.userinfo.imgUrl==""||this.userinfo.imgUrl==null){
+
+                                    this.imageurl="static/lanyangyang.jpg"
+
+
+                                }else{
+                                    this.imageurl=this.userinfo.imgUrl;
+                                }
+                            }
+                        )
+                    }
+
+
+
+
+                },
+                addnewAddr(){
+                    // alert("success")
+                    this.$http.post('/addnewAddr',{
+                        userid:this.userinfo.id,
+                        newaddr:this.newaddr
+                    },{
+                        emulateJSON:true
+                    }).then(function (res) {
+                        console.log(res.body)
+                    })
+                    this.newaddr=""
+                    this.getAddrs()
+                    this.show(5)
+                },
+                getAddrs(){
+                    this.$http.post('/getAddrs',
+                        {userId:this.userinfo.id},
+                        {emulateJSON:true}
+                        ).then(function (res) {
+                            this.addrList=res.body
+                    })
+                },
+                deladdr(id){
+                    this.$http.post("/deladdr",{
+                        addrid:id
+                    },{
+                        emulateJSON:true
+                    }).then(function (res) {
+                        console.log(res.body)
+                        this.getAddrs()
+                    })
+                },
+                lastuse(id){
+                    this.$http.post("/bedefaultaddr",{
+                        addrid:id,
+                        userid:this.userinfo.id
+                    },{
+                        emulateJSON:true
+                    }).then(function (res) {
+                        console.log(res.body)
+                    })
+                }
+
+            },
+            created(){
+                this.getinfo()
+
+
+            }
+            
+        })
+    </script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="meal-portal:war">
+    <output-path>$PROJECT_DIR$/mealportal/target</output-path>
+    <root id="archive" name="meal-portal-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="meal-portal:war exploded" />
+    </root>
+  </artifact>
+</component>

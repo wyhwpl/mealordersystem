@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的订单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">  
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron-narrow.css" rel="stylesheet">
+    <link rel="stylesheet" href="./lib/user-order.css">
+    <link rel="stylesheet" href="./lib/star2.css">
+    <link rel="stylesheet" href="./lib/star3.css">
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+        <div id="head" >
+                <nav class="navbar navbar-inverse navbar-fixed-top" >
+                        <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">OnlineOrderingSystem</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="./entry.html"style="color:black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XX订餐系统</a>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                            <li><a href="./user-index.html">主页</a></li>
+                            <li><a href="./user-info.html">个人信息</a></li>
+                            <li><a href="./user-order.html">我的订单</a></li>
+                            <li><a href="./entry.html">Help</a></li>
+                            </ul>
+                            <form class="navbar-form navbar-right">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            </form>
+                            
+                        </div>
+                    </nav>
+            </div>
+            <br>       
+            <br>
+            <br>
+            <div class="container" id="app" style="opacity:1;">
+   
+      
+
+                <div class="row marketing">
+                      <div class="col-lg-1"> </div>
+              
+                      <div class="col-lg-10">
+                          
+                        <div class="col-sm-3 col-md-2 sidebar">
+                        
+                            <br>
+                              
+                            
+                                <ul class="nav nav-sidebar">
+                                    <li><a href=""@click.prevent="switchto(1)">最近订单</a></li>
+                                    <li><a href=""@click.prevent="switchto(2)">我的收藏</a></li>
+                                </ul>
+                            
+                            
+                        </div>
+                        <!-- <div class="col-lg-3">
+                             <ul>
+                                 <li><a href=""@click.prevent="">最近订单</a></li>
+                                 <li><a href=""@click.prevent="">我的收藏</a></li>
+                             </ul>
+                        </div> -->
+                        <div class="col-sm-9  col-md-10">
+                            <div v-show="showflag">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>订单内容</th>
+                                        <th>商家电话</th>
+                                        <th>支付金额</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-for="item in orderList":key="item.order.id">
+                                    <tr class="warning" @click="showdetails(item)" >
+                                       
+                                        <td>
+                                            <div class="container-fluid">
+                                                <div class="col-md-4">
+                                                    <img src="static/bg-1.jpg" class="img-responsive" alt="Image"style="height: 50px;">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <a :href="geturl(item.order.sellerid)">{{item.order.sellername}}</a>
+                                                    <p>完成时间：{{timetransfer(item.order.ordertime)}} </p>
+                                                    <p>订单号：{{item.order.id}}</p>
+                                                </div>
+                                                
+                                            </div>
+                                        </td>
+                                        <td><br>{{item.order.sellerphone}}</td>
+                                        <td><br>{{item.order.totalPrice}}元</td>
+                                        <td >
+                                            <div v-if="item.status1">
+                                                <br><button @click.stop="oncemore(item.order.sellerid)" type="button" class="btn btn-default">再来一单</button>
+                                            </div>
+                                            <div v-if="item.status2">
+                                                <br><button @click.stop="showdetails(item)" type="button" class="btn btn-default">去评价</button>
+
+                                            </div>
+                                            <div v-if="item.status3">
+                                                <br><button @click.stop="confirm(item.order.id)" type="button" class="btn btn-default">确认收货</button>
+                                            </div>
+                                        </td>
+                                        
+                                        
+                                          
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">   
+                                            <div class="container-fluid" v-if="item.flag">
+                                                <div id="details" class="col-md-4"style="color: #222222;">
+                                                    <h5 >订单详情</h5>
+                                                    
+                                                    <table class="table table-hover">
+                                                        
+                                                        <tbody v-for="food in item.orderFoods":key="food.orderFood.foodid">
+                                                            <tr>
+                                                                <td>{{food.foodname}}</td>
+                                                                <td>{{food.orderFood.copies}}</td>
+                                                                <td>￥{{food.foodprice*food.orderFood.copies}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <h5 class="navbar-right">实际支付：￥{{item.order.totalPrice}}</h5>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <div style="background-color:aliceblue">
+                                                        
+                                                        <table class="table table-hover">
+                                                           
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><p>地址：{{item.order.address }}</p></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><p>姓名：{{item.order.username}}</p></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><p>电话：{{item.order.phone}}</p></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><p>备注：无</p></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                    </div>
+                                                    
+                                                    <br>
+                                                    <div style="color: rgba(255, 0, 0, 0.555)">
+                                                        <p>商家客服电话：18013046003</p>
+
+                                                        <p>本餐厅所列商家所有信息、服务均来自合作方，其信息的真实性、准确性、合法性
+                                                        和服务的质量由信息拥有者（商家）负责。</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8" id="comment">
+                                                    <div >
+
+
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <th>订单状态:</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for=" desc in showstatus(item.order.status)"style="font-weight: bolder;">
+                                                                    <td></td>
+                                                                    <td>{{desc}}</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div v-if="statustransfer(item.order.status)">
+                                                        <h5>订单评价</h5>
+
+                                                        <div>
+
+                                                           <table class="table table-hover">
+
+                                                               <tbody>
+                                                                   <tr>
+                                                                       <td>
+                                                                           总体评价：
+
+                                                                       </td>
+                                                                       <td>
+                                                                            <div id="starBg" class="star_bg">
+                                                                                    <input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+                                                                                    <a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+                                                                                    <input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+                                                                                    <a href="#starScore2" class="star star_2" title="较差"><label for="starScore2">较差</label></a>
+                                                                                    <input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+                                                                                    <a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+                                                                                    <input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+                                                                                    <a href="#starScore4" class="star star_4" title="较好"><label for="starScore4">较好</label></a>
+                                                                                    <input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+                                                                                    <a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+                                                                                </div>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>商家评价：</td>
+                                                                       <td>
+                                                                            <div id="star2Bg" class="star2_bg">
+                                                                                    <input type="radio" id="star2Score1" class="score2 score2_1" value="1" name="score2">
+                                                                                    <a href="#star2Score1" class="star2 star2_1" title="差"><label for="star2Score1">差</label></a>
+                                                                                    <input type="radio" id="star2Score2" class="score2 score2_2" value="2" name="score2">
+                                                                                    <a href="#star2Score2" class="star2 star2_2" title="较差"><label for="star2Score2">较差</label></a>
+                                                                                    <input type="radio" id="star2Score3" class="score2 score2_3" value="3" name="score2">
+                                                                                    <a href="#star2Score3" class="star2 star2_3" title="普通"><label for="star2Score3">普通</label></a>
+                                                                                    <input type="radio" id="star2Score4" class="score2 score2_4" value="4" name="score2">
+                                                                                    <a href="#star2Score4" class="star2 star2_4" title="较好"><label for="star2Score4">较好</label></a>
+                                                                                    <input type="radio" id="star2Score5" class="score2 score2_5" value="5" name="score2">
+                                                                                    <a href="#star2Score5" class="star2 star2_5" title="好"><label for="star2Score5">好</label></a>
+                                                                            </div>
+                                                                        </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>骑手评价：</td>
+                                                                       <td>
+                                                                            <div id="star3Bg" class="star3_bg">
+                                                                                    <input type="radio" id="star3Score1" class="score3 score3_1" value="1" name="score3">
+                                                                                    <a href="#star3Score1" class="star3 star3_1" title="差"><label for="star3Score1">差</label></a>
+                                                                                    <input type="radio" id="star3Score2" class="score3 score3_2" value="2" name="score3">
+                                                                                    <a href="#star3Score2" class="star3 star3_2" title="较差"><label for="star3Score2">较差</label></a>
+                                                                                    <input type="radio" id="star3Score3" class="score3 score3_3" value="3" name="score3">
+                                                                                    <a href="#star3Score3" class="star3 star3_3" title="普通"><label for="star3Score3">普通</label></a>
+                                                                                    <input type="radio" id="star3Score4" class="score3 score3_4" value="4" name="score3">
+                                                                                    <a href="#star3Score4" class="star3 star3_4" title="较好"><label for="star3Score4">较好</label></a>
+                                                                                    <input type="radio" id="star3Score5" class="score3 score3_5" value="5" name="score3">
+                                                                                    <a href="#star3Score5" class="star3 star3_5" title="好"><label for="star3Score5">好</label></a>
+                                                                                </div>
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr>
+                                                                       <td>补充评价：</td>
+                                                                       <td>
+                                                                            <textarea v-model="comm"  cols="35" rows="8"></textarea>
+
+
+                                                                       </td>
+                                                                   </tr>
+                                                                   <tr >
+                                                                       <td></td>
+                                                                       <td class="navbar-right " >
+
+                                                                           <button @click="evluate(item.order.id)" type="button" class="btn  btn-success">提交</button>
+
+                                                                       </td>
+                                                                   </tr>
+                                                               </tbody>
+                                                           </table>
+
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                <div style="text-align: center;">
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <p>商家没有送餐？您可以致电客服 10109777 或 <a href="">投诉商家</a>   。</p>
+                                                </div>
+                                                </div>
+                                        </td> 
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        <div v-show="!showflag">
+                            
+                            <table class="table table-hover">
+                                
+                                <tbody v-for="c in collectionList":key="c.id">
+                                    <tr class="warning" >
+                                        <td>
+                                                <div class="container-fluid">
+                                                        <div class="col-md-3">
+                                                            <img src="static/lanyangyang.jpg" class="img-responsive" alt="Image"style="height: 80px;">
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <a href="">{{c.name}}</a>
+                                                            <p>评分：{{c.score}} </p>
+                                                            <p>起送￥15&nbsp;配送费￥2</p>
+                                                        </div>
+                                                        
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-1"></div>
+                </div>
+              
+                <!-- <footer class="footer">
+                      <p>&copy;2018 NUAA1615303小队 Inc.</p>
+                </footer> -->
+              
+            </div>   
+            <script>
+                var vm=new Vue({
+                    el:"#app",
+                    data:{
+                        showflag:true,
+                        orderList:[],
+                        comm:"",
+                        collectionList:[
+                            {id:1234,name:"白下元宵铺",score:"4.6"},
+                            {id:1235,name:"蛮头小锅菜",score:"4.5"},
+                            {id:1236,name:"正新鸡排",score:"4.7"},
+
+                        ]
+                    },
+                    methods:{
+                        oncemore(id){
+                            window.location.href="/shop.html?sellerid="+id
+                        },
+                        geturl(sellerid){
+                            return "/shop.html?sellerid="+sellerid
+                        },
+                        showdetails(obj){
+                            // console.log(obj)
+                            obj.flag=!obj.flag
+
+                            this.$forceUpdate();
+
+                        },
+                        confirm(id){
+                            this.$http.post("/confirm",{orderid:id},
+                                {emulateJSON:true}).then(function (res) {
+                                    console.log(res.body)
+                                this.getOrderList()
+                                this.$forceUpdate()
+                            })
+
+                        },
+                        showstatus(status){
+
+                            var list=[];
+                            switch (status){
+                                case 0:
+                                    list.push("用户未支付，已取消订单")
+                                    return list;
+                                    break
+                                case 1:
+                                    list.push("用户已支付")
+                                    list.push("商家尚未接单")
+                                    return list;
+                                    break
+                                case 2:
+                                    list.push("用户已支付")
+                                    list.push("商家已接单，准备商品中")
+                                    return list;
+                                    break
+                                case 3:
+                                    list.push("用户已支付")
+                                    list.push("商家已接单")
+                                    list.push("骑手已取到商品，正在配送中")
+                                    return list;
+                                    break
+                                case 4:
+                                    list.push("用户已支付")
+                                    list.push("商家已接单")
+                                    list.push("商品已送达，请确认收货")
+                                    return list;
+                                    break
+                                case 5:
+                                    list.push("用户已支付")
+                                    list.push("商家已接单")
+                                    list.push("商品已送达")
+                                    list.push("已确认收货，赶快去评价吧")
+                                    return list;
+                                    break
+                                case 6:
+                                    list.push("用户已支付")
+                                    list.push("商家已接单")
+                                    list.push("商品已送达")
+                                    list.push("已确认收货")
+                                    list.push("已完成评价，当前订单已关闭")
+                                    return list;
+                                    break
+
+                            }
+                        },
+                        statustransfer(status){
+                            if(status==5){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        },
+                        timetransfer(unixtimestamp){
+
+
+                                var unixtimestamp = new Date(unixtimestamp);
+                                var year = 1900 + unixtimestamp.getYear();
+                                var month = "0" + (unixtimestamp.getMonth() + 1);
+                                var date = "0" + unixtimestamp.getDate();
+                                var hour = "0" + unixtimestamp.getHours();
+                                var minute = "0" + unixtimestamp.getMinutes();
+                                var second = "0" + unixtimestamp.getSeconds();
+                                return year + "-" + month.substring(month.length-2, month.length)  + "-" + date.substring(date.length-2, date.length)
+                                    + " " + hour.substring(hour.length-2, hour.length) + ":"
+                                    + minute.substring(minute.length-2, minute.length) + ":"
+                                    + second.substring(second.length-2, second.length);
+
+
+                        },
+
+                        evluate(id){
+                            this.comm=""
+
+                            console.log(id)
+                            this.$http.post("/evluate",{orderid:id},
+                                {emulateJSON:true}).then(function (res) {
+                                console.log(res.body)
+                                this.getOrderList()
+                                this.$forceUpdate()
+                            })
+
+                        },
+                        switchto (key) {
+                            switch (key) {
+                                case 1:   
+                                    this.showflag=true
+                                    break
+                                case 2:
+                                    this.showflag=false
+                                    break
+                            }
+                        },
+                        getOrderList(){
+                            var user = JSON.parse(sessionStorage.getItem("user"))
+                            // console.log(user)
+                            if(user==null||user.phone==""){
+                                window.location.href="/login"
+                            }
+                            else{
+                                var phone=user.phone
+                                this.$http.post('/getorderlist',{phone:phone},{emulateJSON:true}).then(
+                                    function (res) {
+                                        // console.log(res.body)
+                                        this.orderList=res.body
+                                        this.orderList.forEach(function (item) {
+
+                                            if(item.order.status==6){
+                                                item.status1=true
+                                                item.status2=false
+                                                item.status3=false
+                                            }else if(item.order.status==5){
+                                                item.status1=false
+                                                item.status2=true
+                                                item.status3=false
+                                            }else{
+                                                item.status1=false
+                                                item.status2=false
+                                                item.status3=true
+                                            }
+                                        })
+
+                                    }
+                                )
+                            }
+                        }
+                    },
+                    created(){
+                        this.getOrderList()
+                    }
+
+                })
+
+            </script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>欢迎光临本店</title>   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">  
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+    a {
+        font-family:"微软雅黑";
+        font-weight: bolder;
+        
+    }
+    a:link,a:visited 
+    {
+        color:#444;text-decoration:none;
+    }
+    a:hover {
+        color:#ff0000;
+    }
+    
+   #cart {
+    position:fixed; 
+   }
+
+</style>
+
+<body>
+    
+  
+      <div class="container" id="container">
+  
+        <div class="col-lg-1">
+             </div>
+        <div class="col-lg-9">
+            <div>
+                <h1>欢迎光临本店</h1> 
+                
+                <table class="table table-hover">
+                    
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="container-fluid">
+                                    <div class="col-md-3">
+                                        <img :src="getshopimg()" class="img-responsive" alt="Image"style="height: 80px;">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <a href="">{{shopinfo.sellername}}</a>
+                                        <p>评分：4.7 </p>
+                                        <p>起送￥15&nbsp;配送费￥2.5</p>
+                                    </div>
+                                            
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                 
+            </div>
+            <div>
+                    <ul id="myTab" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#menu" data-toggle="tab">
+                                     菜单
+                                </a>
+                            </li>
+                            <li><a href="#ios" data-toggle="tab">评价</a></li>
+                            <!-- <li class="dropdown">
+                                <a href="#" id="myTabDrop1" class="dropdown-toggle" 
+                                   data-toggle="dropdown">Java 
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+                                    <li><a href="#jmeter" tabindex="-1" data-toggle="tab">jmeter</a></li>
+                                    <li><a href="#ejb" tabindex="-1" data-toggle="tab">ejb</a></li>
+                                </ul>
+                            </li> -->
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="menu">
+                                    
+                                            <div class="col-sm-3  col-md-2">
+                                                    <ul class="nav nav-pills nav-stacked "v-for="item in typeList":key="item.typeId">
+                                                            <li>
+                                                                <a :href="tohref(item.typeName)">{{item.typeName}}</a>
+                                                             
+                                                            </li>
+                                                            
+                                                    </ul>
+                                            </div>    
+                                            <div class="col-sm-9  col-md-10">
+                                                <div v-for="item in typeList":key="item.typeId">
+                                                    <div :id="item.typeName">
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>{{item.typeName}}</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody v-for="food in item.foods":key="food.id">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="col-md-3">
+                                                                            <img :src="getfoodimg(food.imgUrl)" class="img-responsive" alt="Image"style="height: 70px;">
+                                                                        </div>
+                                                                        <div class="col-md-9">
+                                                                            <p style="font-weight: bolder">{{food.foodname}}</p>
+                                                                            <p>描述：{{food.description}}</p>
+                                                                            <p>评分：4.7 </p>
+                                                                            
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <br>
+                                                                        <br>
+                                                                        单价：￥{{food.price}}
+                                                                    </td>
+                                                                    <td>
+                                                                        <br>
+                                                                        <button type="button" style="width: 50px;height: 50px;border-radius: 50%;border: none;" class="btn "@click="add(food)">+</button>
+                                                                        {{food.amount}}
+                                                                        <button type="button" style="width: 50px;height: 50px;border-radius: 50%;border: none;" class="btn "@click="sub(food)">-</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                </div>
+                           
+                            <div class="tab-pane fade" id="ios">
+                                <p>暂无评价</p>
+                            </div>
+                            
+                        </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-2" style="text-align: right">
+            
+            
+             
+            <div v-if="cartflag" id="cart">
+                    
+                    
+                    <div>
+                        <table class="table table-hover">
+                                <thead>
+                                        <tr>
+                                            <th>购物车</th>
+                                            <th >
+                                            <button @click="clear" type="button" class="btn btn-sm btn-success">清空购物车</button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                            <tbody v-for="food in cart()":key="food.id">
+
+                                <tr>
+                                    <td>{{food.foodname}}</td>
+                                    <td>￥{{food.price}}</td>
+                                    <td>X &nbsp;&nbsp;{{food.amount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table class="table table-hover">
+                           
+                            <tbody>
+                                <tr>
+                                    <td>包装费： ￥2</td>
+                                </tr>
+                                <tr>
+                                    <td>配送费： ￥3</td>
+                                </tr>
+                                <tr>
+                                    <td>总计:￥{{totalprice()}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        
+                                        <button type="button" class="btn btn-success"data-toggle="modal" data-target="#myModal">提交订单</button>
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+            </div>
+
+        </div>
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"style="text-align: center">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                              &times;
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">
+                              订单确认
+                          </h4>
+                      </div>
+                      <div class="modal-body">
+                          <div >
+
+                                <div>收货地址：<input type="text"class="input-sm" v-model="addr"><button @click="selectaddr" type="button" class="btn btn-sm btn-success">选择收货地址</button></div>
+                                <div v-if="addrflag">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>地址</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody v-for="(item,index) in addrs ":key="item.addrid">
+                                        <tr>
+                                            <td>{{index + 1}}</td>
+                                            <td>{{item.addrdesc}}</td>
+                                            <td><a href="#"@click.prevent="readdr(item.addrdesc)">选择该地址</a></td>
+                                        </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                              <div>
+                                  <table class="table table-hover">
+                                      <thead>
+                                      <tr>
+
+                                          <th >订单详情</th>
+
+                                      </tr>
+                                      </thead>
+                                      <tbody v-for="food in cart()":key="food.id">
+
+                                      <tr>
+                                          <td>{{food.foodname}}</td>
+                                          <td>￥{{food.price}}</td>
+                                          <td>X &nbsp;&nbsp;{{food.amount}}</td>
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <div>
+
+
+                                  <table class="table table-hover">
+
+                                      <tbody>
+                                      <tr>
+                                          <td>包装费： ￥2</td>
+                                      </tr>
+                                      <tr>
+                                          <td>配送费： ￥3</td>
+                                      </tr>
+                                      <tr>
+                                          <td>总计:￥{{totalprice()}}</td>
+                                      </tr>
+
+                                      </tbody>
+                                  </table>
+
+
+                              </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">取消订单
+                          </button>
+                          <button type="button" class="btn btn-primary"@click="submitorder">
+                              去支付
+                          </button>
+                      </div>
+                  </div><!-- /.modal-content -->
+              </div><!-- /.modal -->
+          </div>
+        
+  
+          
+  
+      </div><!--/.container-->
+      <script>
+          var vm=new Vue({
+              el:"#container",
+              data:{
+                  shopinfo:{},
+                  typeList:[],
+                  shopingcart:[],
+                  cartflag:false,
+                  addr:"",
+                  userinfo:{},
+                  addrs:[],
+                  addrflag:false,
+                  sellerid:""
+
+              },
+              methods:{
+                  getshopimg(){
+                    if(this.shopinfo.imgUrl==null||this.shopinfo.imgUrl==""){
+                        return "static/bg-1.jpg"
+                    }
+                    else{
+                        return this.shopinfo.imgUrl
+                    }
+                  },
+                  totalprice(){
+                     var totalprice=0
+                     this.shopingcart.forEach(function (value) {
+                         totalprice+=value.price*value.amount
+                     })
+                      return totalprice+5
+                  },
+                  getfoodimg(imgUrl){
+                        if(imgUrl==null||imgUrl==""){
+                            return "static/bg-1.jpg"
+                        }else{
+                            return imgUrl
+                        }
+                  },
+                  tohref(str){
+                      return "#"+str
+                  },
+                  selectaddr(){
+                        this.addrflag=true
+                  },
+                  readdr(addr){
+                      this.addrflag=false
+                    this.addr=addr
+                  },
+                  submitorder(){
+                      var userid=this.userinfo.id
+                      var sellerid=this.sellerid
+                      var addr=this.addr
+                      var foods=JSON.stringify(this.shopingcart)
+                      console.log(foods)
+                      this.$http.post('/submitorder',{
+                          userid:userid,
+                          sellerid:sellerid,
+                          addr:addr,
+                          foods:foods
+                      },{emulateJSON:true}).then(
+                          function (res) {
+                              console.log(res.body)
+                              window.location.href="/user-order"
+                          }
+                      )
+                  },
+                  cart(){
+                      if(this.shopingcart == null||this.shopingcart.length==0){
+                          this.cartflag=false
+                          this.$forceUpdate()
+                          return []
+                      }else {
+                          this.flag = true
+                          return this.shopingcart
+                      }
+
+                  },
+                  add(food){
+                      var user = JSON.parse(sessionStorage.getItem("user"))
+                      if(user==null||user.phone==""){
+                          alert("请先登录")
+                          window.location.href="/login"
+                          return
+                      }
+                      this.getuserinfo()
+                      this.cartflag=true
+
+                      var cart=this.shopingcart
+                      cart.forEach(function (f,index) {
+                          if(f.id==food.id){
+                              cart.splice(index,1)
+
+                          }
+                      })
+                      food.amount++
+                      cart.push(food)
+
+                  },
+                  sub(food){
+                      if(food.amount==0) {
+                          return
+                      }
+                      else{
+                          var cart=this.shopingcart
+                          cart.forEach(function (f,index) {
+                            if(f.id==food.id){
+                                cart.splice(index,1)
+                            }
+                          })
+                          // console.log(cart)
+                          food.amount--
+                          // console.log(food.amount)
+                          if(food.amount==0){
+
+                              if(cart==null||cart.length==0){
+                                  this.cartflag=false
+                                  // console.log(this.cartflag)
+                                  this.$forceUpdate()
+
+                              }
+                          }
+                          else{
+                              this.shopingcart.push(food)
+                          }
+                      }
+                  },
+                  clear(){
+                      this.cartflag=false
+                      this.shopingcart=[]
+                      if(this.typeList!=null){
+                          this.typeList.forEach(function (item) {
+                              item.foods.forEach(function (food) {
+                                  food.amount=0
+                              })
+                          })
+                      }
+
+                  },
+
+                  getInfo(){
+                      var url=window.location.search
+                      // console.log(url)
+                      var index=url.indexOf("=")
+                     // console.log(index)
+                      var id=url.substr(index+1)
+                      this.sellerid=id
+                     // console.log(id)
+                      this.$http.post("/getshopinfo",{sellerid:id}
+                      ,{emulateJSON:true}).then(
+                          function (res) {
+                              //console.log(res.body)
+                              this.shopinfo=res.body
+                          }
+                      )
+                  },
+                  getFoodInfo(){
+                      var url=window.location.search
+                      // console.log(url)
+                      var index=url.indexOf("=")
+                      // console.log(index)
+                      var id=url.substr(index+1)
+                      // console.log(id)
+                      this.$http.post("/getfoodinfo",{sellerid:id}
+                          ,{emulateJSON:true}).then(
+                          function (res) {
+                              // console.log(res.body)
+                              this.typeList=res.body.typeList
+                              if(this.typeList!=null){
+                                  this.typeList.forEach(function (item) {
+                                      item.foods.forEach(function (food) {
+                                          food.amount=0
+                                      })
+                                  })
+                              }
+                          }
+                      )
+                  },
+                  getuserinfo(){
+                      var user = JSON.parse(sessionStorage.getItem("user"))
+                      if(user==null||user.phone==""){
+                          window.location.href="/login"
+                      }else{
+                          var phone=user.phone
+                          this.$http.post('/user-info',{phone:phone},{emulateJSON:true}).then(
+                              function (res) {
+                                  this.userinfo=res.body
+                                  this.getaddrs()
+                              }
+                          )
+                      }
+                  },
+                  getaddrs(){
+                      this.$http.post('/getAddrs',
+                          {userId:this.userinfo.id},
+                          {emulateJSON:true}
+                      ).then(function (res) {
+                          this.addrs=res.body
+                          var address=this.addr
+                          if(this.addrs!=null){
+                                this.addrs.forEach(function (add) {
+                                        if(add.recentuse==1){
+                                            address=add.addrdesc
+                                            // console.log(address)
+                                        }
+                                })
+                          }
+                          this.addr=address
+                      })
+                  }
+              },
+              created(){
+                  this.getInfo()
+                  this.getFoodInfo()
+
+              }
+          })
+      </script>
+  
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+      <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+      <script src="offcanvas.js"></script>
+</body>
+</html>

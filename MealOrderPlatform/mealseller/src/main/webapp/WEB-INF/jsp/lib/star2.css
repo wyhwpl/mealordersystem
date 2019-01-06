@@ -1,0 +1,54 @@
+
+/* 星星点灯照亮我的家门 */
+.star2_bg {
+    width: 120px; height: 20px;
+    background: url(../static/star.png) repeat-x;
+    position: relative;
+    overflow: hidden;
+}  
+.star2 {
+    height: 100%; width: 24px;
+    line-height: 6em;
+    position: absolute;
+    z-index: 3;
+}
+.star2:hover {    
+    background: url(../static/star.png) repeat-x 0 -20px!important;
+    left: 0; z-index: 2;
+}
+.star2_1 { left: 0; }
+.star2_2 { left: 24px; }
+.star2_3 { left: 48px; }
+.star2_4 { left: 72px; }
+.star2_5 { left: 96px; }
+.star2_1:hover { width: 24px; }
+.star2_2:hover { width: 48px; }
+.star2_3:hover { width: 72px; }
+.star2_4:hover { width: 96px; }
+.star2_5:hover { width: 120px; }
+
+label { 
+    display: block; _display:inline;
+    height: 100%; width: 100%;
+    cursor: pointer;
+}
+
+/* 幕后的英雄，单选按钮 */
+.score2 { position: absolute; clip: rect(0 0 0 0); }
+.score2:checked + .star2 {    
+    background: url(../static/star.png) repeat-x 0 -20px;
+    left: 0; z-index: 1;
+}
+.score2_1:checked ~ .star2_1 { width: 24px; }
+.score2_2:checked ~ .star2_2 { width: 48px; }
+.score2_3:checked ~ .star2_3 { width: 72px; }
+.score2_4:checked ~ .star2_4 { width: 96px; }
+.score2_5:checked ~ .star2_5 { width: 120px; }
+
+.star2_bg:hover .star2 {  background-image: none; }
+
+/* for IE6-IE8 JS 交互 */
+.star2_checked {    
+    background: url(../static/star.png) repeat-x 0 -20px;
+    left: 0; z-index: 1;
+}

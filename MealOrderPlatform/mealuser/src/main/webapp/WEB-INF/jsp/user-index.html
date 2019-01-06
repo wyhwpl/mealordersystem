@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>用户主页</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <style>
+    #navbar a{
+        color:black;
+       
+    }       
+  </style>
+  <body style="background: url('static/food4.jpeg') no-repeat;background-size: 100%">
+  <div id="app">
+        <div id="head" >
+            <nav class="navbar navbar navbar-fixed-top" >
+                    <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">OnlineOrderingSystem</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="javascript:;" onclick="portal()" style="color:black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XX订餐系统</a>
+                    </div>
+
+                    <div id="navbar"  class="navbar-collapse collapse">
+                        <div v-if="!haslogined">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="javascript:;" onclick="portal()" >首页</a></li>
+
+                                <!--<li><a href="/user-order">我的订单</a></li>-->
+                                <li><a href="javascript:;" onclick="portal()">帮助</a></li>
+                                <li><a href="/login">登录/注册</a></li>
+                            </ul>
+                            <form class="navbar-form navbar-right">
+                                <input type="text" class="form-control" placeholder="Search...">
+                            </form>
+                        </div>
+                        <div v-if="haslogined">
+                            <ul class="nav navbar-nav navbar-right">
+                            <li><a href="javascript:;" onclick="portal()">首页</a></li>
+                            <li><a href="/user-info">个人信息</a></li>
+                            <li><a href="/user-order">我的订单</a></li>
+                            <li><a href="/logout"@click.prevent="logout">退出系统</a></li>
+                        </ul>
+                            <form class="navbar-form navbar-right">
+                                <input type="text" class="form-control" placeholder="Search...">
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+        </div>
+        <br>       
+        <br>
+        <br>
+       
+    <div class="container"  style="opacity:1;">
+   
+      
+
+      <div class="row marketing">
+        <div class="col-lg-2"style="height: 535px;"> </div>
+
+        <div class="col-lg-8">
+          <div v-if="flag" id="sbox" style="height: 200px; ">
+            </div>
+               
+              <!-- <legend>选择您的城市</legend> -->
+              <!--<div class="dropdown">-->
+                    <!--<button type="button" class="btn dropdown-toggle" id="dropdownMenu1" -->
+                            <!--data-toggle="dropdown">-->
+                        <!--城市-->
+                        <!--<span class="caret"></span>-->
+                    <!--</button>-->
+                    <!--<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">-->
+                        <!--<li role="presentation">-->
+                            <!--<a role="menuitem" tabindex="-1" href="#">南京</a>-->
+                        <!--</li>-->
+                        <!--<li role="presentation">-->
+                            <!--<a role="menuitem" tabindex="-1" href="#">上海</a>-->
+                        <!--</li>                        -->
+                    <!--</ul>-->
+                <!--</div>-->
+              <div class="form-group"style="opacity: 0.5;">
+
+                  <input id="btn1" type="button" class="btn btn-default pull-right"@click="showmap" :value="btn1"></input>
+                  <input placeholder="详细地址 美食种类 店家名称" v-model="keywords"  type="text" class="form-control" id="sea" >
+              </div>
+
+                <div class="col-md-8" v-if="mapflag" >
+                    <button @click="getList" type="button" class="btn btn-warning pull-left">选择当前地址</button>
+                    <iframe   id="map" src="jsp/map.html" width="900" height="400" frameborder="0" scrolling="no"></iframe>
+                    <!-- <div id="map"></div> -->
+                </div>
+          
+              <!-- <button  class="btn btn-primary">搜索</button> -->
+          <div v-if="!flag">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody v-for="item in dosearch(keywords)" :key="item.id">
+                    <tr>
+                        <!--<td><a href="./shop.html">{{item.name}}</a></td>-->
+                        <!--<td>{{item.address}}</td>-->
+                        <td>
+                            <div class="container-fluid">
+                                <div class="col-md-3">
+                                    <img :src="getimg(item.imgUrl)" class="img-responsive" alt="Image"style="height: 80px;">
+                                </div>
+                                <div class="col-md-9">
+                                    <a :href="getLink(item.id)">{{item.sellername}}</a>
+
+                                    <p>店铺地址：{{item.address}}</p>
+                                    <p>店铺编号：{{item.id}}</p>
+                                </div>
+                        </td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </div>
+        
+        </div>
+        <div class="col-lg-2"></div>
+      </div>
+
+      <footer class="footer">
+        <p>&copy;2018 NUAA1615303小队 Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+  </div>
+    <script>
+        var vm =new Vue({
+            el:"#app",
+            data:{
+                username:"qixiao",
+                btn1:"选择您的地址",
+                flag:true,
+                haslogined:false,
+                keywords:"",
+                shopList:[],
+                mapflag:false,
+                
+            },
+            methods: {
+                getimg(url){
+                    if(url==null||url==""){
+                        return "static/bg-1.jpg"
+                    }else{
+                        return url
+                    }
+                },
+                getList() {
+
+                    // document.getElementById("sea").focus()
+                    var map=document.getElementById("map").contentWindow;
+                    // console.log(map);
+
+                    var address=map.document.address;
+                    console.log(address);
+                    this.mapflag=false
+                    this.btn1=address.city+address.district+address.street
+                    if(address!=null){
+                        this.$http.post('/getByExample',{
+                            province:address.province,
+                            city:address.city,
+                            district:address.district,
+                            street:address.street
+                        },{emulateJSON:true}).then(function(res){
+
+                            console.log(res.body)
+                            this.shopList=res.body
+
+                        });
+
+                    }
+
+                },
+                dosearch(keywords) {
+                    var realList = [];
+                    if (keywords == "") {
+                        return this.shopList
+                    }
+                    this.shopList.forEach(item => {
+                        if (item.sellername.indexOf(keywords) != -1 || item.address.indexOf(keywords) != -1) {
+                            realList.push(item)
+                        }
+                    });
+                    return realList;
+                },
+                islogined() {
+
+                    user = JSON.parse(sessionStorage.getItem("user"))
+                    // console.log(user.name)
+                    if(user==null||user.phone==""){
+                       // alert("please login first!")
+                        this.haslogined=false
+                    }
+                    else {
+                       this.haslogined=true
+                    }
+
+                },
+                logout(){
+                    sessionStorage.removeItem("user")
+                    window.location.href="/user-index"
+                },
+                showmap(){
+                    this.flag = false
+                    this.mapflag=true
+
+                },
+                getLink(id){
+                    return "shop.html?sellerid="+id
+                }
+            },
+            created(){
+                this.islogined()
+            }
+        })
+
+        
+    </script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  <script>
+      function portal() {
+          window.location.href="http://localhost:8080";
+      }
+  </script>
+  </body>
+</html>
